@@ -1,15 +1,15 @@
 import crawler
-import random
+import captcha
 import requests
 
 class Scraper:
     def __init__(self, max_crawlers, captcha_key, proxy = None):
-        self.crawler = crawler.Crawler(max_crawlers, captcha_key, proxy)
+        self.crawler = crawler.Crawler(max_crawlers, captcha.Captcha(captcha_key), proxy)
 
     def lookup_query(self, query, page):
         for _ in range(10): # This is not the user's fault and can be many factors, setting to 10 maybe too low?
             random_crawler: requests.Session = self.crawler.get_random_crawler()
-            response = random_crawler.get("https://www.google.com/search?q=" + query + "&start=" + page).text
+            response = random_crawler.get("https://www.google.com/search?q=" + query + "&start=" + str(page - 1)).text
 
             if ("SPDX-License-Identifier: Apache-2.0" in response):
                 self.crawler.crawlers.remove(random_crawler) # Delete this fault crawler

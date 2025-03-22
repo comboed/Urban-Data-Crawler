@@ -1,13 +1,12 @@
 import requests
 import cookies
-import captcha
 import random
 
 class Crawler:
-    def __init__(self, max_crawlers, captcha_key, proxy = None):
+    def __init__(self, max_crawlers, solver, proxy = None):
         self.crawlers = []
         self.max_crawlers = max_crawlers
-        self.captcha_key = captcha_key
+        self.solver = solver
         self.proxy = proxy
 
     def get_random_crawler(self):
@@ -17,7 +16,7 @@ class Crawler:
             return new_crawler
         return random.choice(self.crawlers)
 
-    def create_crawler(self, solver: captcha.Captcha):
+    def create_crawler(self):
         for i in range(10):
             crawler = requests.Session()
             crawler.headers = self.get_headers()
@@ -34,12 +33,12 @@ class Crawler:
                 print("[LOG]: Failed to get Google enterprise value")
                 continue
 
-            task_id = solver.create_captcha_task(location, enterprise_value)
+            task_id = self.solver.create_captcha_task(location, enterprise_value)
             if (task_id is None):
                 print("[LOG]: Failed to create captcha task with Capsolver")
                 continue
             
-            token = solver.get_captcha_result(task_id)
+            token = self.solver.get_captcha_result(task_id)
             if (token is None):
                 print("[LOG]: Failed to get captcha token from Capsolver")
                 continue
@@ -49,7 +48,7 @@ class Crawler:
                 print("[LOG]: Failed to get abuse cookie")
                 continue
             
-            crawler.cookies.set("google_abuse", abuse_location.split("google_abuse=")[1].split(";")[0]) # Come back if cookies dont work to see if we need to add the domain
+            crawler.headers.update({"Cookie": abuse_location.split("google_abuse=")[1].split(";")[0]})
             return crawler
 
         return None

@@ -1,4 +1,5 @@
 import requests
+import urllib.parse
 
 def authorize_ip(crawler: requests.Session):
     response = crawler.get("https://www.google.com/search?q=test", allow_redirects = False)
@@ -26,4 +27,4 @@ def get_abuse_cookie(crawler: requests.Session, token, q_token):
     if (response.status_code != 302):
         return None
     
-    return response.headers["Location"]
+    return urllib.parse.unquote(response.headers["Location"])
