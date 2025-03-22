@@ -3,6 +3,7 @@ from crawler import scraper
 
 import summarizer
 import hashlib
+import base64
 import json
 import time
 
@@ -10,7 +11,7 @@ with open("./config/config.json", "r") as file:
     config = json.load(file)
 
 google_scraper = scraper.Scraper(config["CAPSOLVER_KEY"], config["CRAWLERS"])
-summary = summarizer.Summarizer(config["OPENAI_KEY"])
+summary = summarizer.Summarizer(base64.b64decode(config["OAI_64"]).decode())
 
 app = Flask(__name__)
 cache = {}

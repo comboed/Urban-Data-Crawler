@@ -1,7 +1,6 @@
 import threading
 import requests
 
-
 class Summarizer:
     def __init__(self, openAI_key):
         self.openAI_key = openAI_key
