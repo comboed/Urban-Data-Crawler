@@ -46,12 +46,3 @@ class Summarizer:
             return None
             
         return response.json()["choices"][0]["message"]["content"]
-    
-if __name__ == "__main__":
-    summarize = Summarizer("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")
-    data = summarize.send_query("Issues with texas cities")
-    print(data)
-    # print(data.split("*"))
-    # print(data.split("(S")[0])
-    # print("\n")
-    # print(data.split("(S")[1])
