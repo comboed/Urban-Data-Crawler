@@ -93,6 +93,12 @@
             background-color: rgba(255, 255, 255, 0.05);
             transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
         }
+        .result-item li {
+            color: #f8fafc;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 12px; /* ← added more spacing between bullets */
+        }
 
         .result-item:hover {
             transform: translateY(-4px);
@@ -149,12 +155,17 @@
             font-weight: 600;
             font-size: 15px;
             text-decoration: none;
-            transition: text-shadow 0.3s ease, color 0.3s ease;
+            transition: text-shadow 0.3s ease, color 0.3s ease, transform 0.3s ease;
+            display: inline-block;
+            position: relative;
         }
 
         .source-link:hover {
             color: #ffffff;
-            text-shadow: 0 0 6px rgba(255, 255, 255, 0.4), 0 0 12px rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px) scale(1.03);
+            text-shadow: 0 0 6px rgba(255, 255, 255, 0.4),
+                        0 0 12px rgba(147, 197, 253, 0.3),
+                        0 0 18px rgba(147, 197, 253, 0.2);
         }
     </style>
 </head>
@@ -170,18 +181,32 @@
             <label for="page">Page to Scrape</label>
             <input type="number" name="page" value="1" min="1" max="9">
 
+            <label for="limit">Max Results</label>
+            <input type="number" name="limit" value="1" min="1" max="9">
+
             <input type="submit" value="Start Scraping">
         </form>
-
         {% if results %}
         <div class="results">
             <h2>Summarized Results</h2>
-            {% for title, content in results.items() %}
+            {% for source, points in results.items() %}
             <div class="result-item">
-                <h3>{{ title }}</h3>
-                <p><strong>Issue:</strong> <span>{{ content[0] }}</span></p>
-                <p><strong>Solution:</strong> <span>{{ content[1] }}</span></p>
-                <p><a class="source-link" href="{{ content[2] }}" target="_blank">Source</a></p>
+                <h3>Source</h3>
+                <p><a class="source-link" href="{{ source }}" target="_blank">View Article</a></p>
+        
+                <p><strong>Issue:</strong></p>
+                <ul>
+                    {% for point in points[:3] %}
+                    <li>{{ point }}</li>
+                    {% endfor %}
+                </ul>
+                
+                <p><strong>Solution:</strong></p>
+                <ul>
+                    {% for point in points[3:] %}
+                    <li>{{ point }}</li>
+                    {% endfor %}
+                </ul>
             </div>
             {% endfor %}
         </div>

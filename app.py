@@ -23,6 +23,7 @@ def index():
     if request.method == "POST":
         query = request.form.get("query")
         page = int(request.form.get("page", 1))
+        limit = int(request.form.get("limit", 1))
         cache_key = hashlib.sha256(f"{query.lower()}:{page}".encode()).hexdigest()
 
         if cache_key in cache:
@@ -34,7 +35,7 @@ def index():
                 del cache[cache_key]  # Expired
         else:
             print("🔄 Fetching new result")
-            scraped = google_scraper.lookup_query(query, page)
+            scraped = google_scraper.lookup_query(query, page, limit)
             results = summary.process_scraped_data(scraped)
 
             cache[cache_key] = {
