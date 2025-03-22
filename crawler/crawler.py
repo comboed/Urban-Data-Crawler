@@ -1,14 +1,43 @@
 import requests
-import auth
+import cookies
+import captcha
 
-def create_crawler(proxy = None):
-    crawler = requests.Session()
-    if (proxy):
-        crawler.proxies = {"http": "http://" + proxy, "https": "http://" + proxy}
-    
-    crawler.headers = get_headers()
+def create_crawler(solver: captcha.Captcha, proxy = None):
+    for i in range(10):
+        crawler = requests.Session()
+        crawler.headers = get_headers()
+        if (proxy):
+            crawler.proxies = {"http": "http://" + proxy, "https": "http://" + proxy}
+            
+        location = cookies.authorize_ip(crawler)
+        if (location is None):
+            print("[LOG]: Failed to pre-authorize IP")
+            continue
 
-    return crawler
+        enterprise_value = cookies.get_enterprise_value(crawler, location)
+        if (enterprise_value is None):
+            print("[LOG]: Failed to get Google enterprise value")
+            continue
+
+        task_id = solver.create_captcha_task(location, enterprise_value)
+        if (task_id is None):
+            print("[LOG]: Failed to create captcha task with Capsolver")
+            continue
+        
+        token = solver.get_captcha_result(task_id)
+        if (token is None):
+            print("[LOG]: Failed to get captcha token from Capsolver")
+            continue
+        
+        abuse_location = cookies.get_abuse_cookie(crawler, token, location.split("&q=")[1])
+        if (abuse_location is None):
+            print("[LOG]: Failed to get abuse cookie")
+            continue
+        
+        crawler.cookies.set("google_abuse", abuse_location.split("google_abuse=")[1].split(";")[0]) # Come back if cookies dont work to see if we need to add the domain
+        return crawler
+
+    return None
 
 def get_headers():
     return {
@@ -27,6 +56,7 @@ def get_headers():
         "Sec-CH-UA-Full-Version-List": '"Chromium";v="134.0.6998.89", "Not:A-Brand";v="24.0.0.0", "Google Chrome";v="134.0.6998.89"',
         "Sec-CH-UA-Mobile": "?0",
         "Sec-CH-UA-Model": '""',
+        "Content-Type": "application/x-www-form-urlencoded",
         "Sec-CH-UA-Platform": '"Windows"',
         "Sec-CH-UA-Platform-Version": '"19.0.0"',
         "Sec-CH-UA-WoW64": "?0",
