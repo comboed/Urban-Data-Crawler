@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Urban Intelligence Crawler</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(to bottom right, #1f1f47, #2b2d63);
+            color: white;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: start;
+            padding-top: 60px;
+        }
+
+        .glass-container {
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            padding: 32px;
+            width: 500px;
+            max-width: 90%;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        p {
+            font-size: 14px;
+            opacity: 0.8;
+            margin-bottom: 24px;
+        }
+
+        label {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 16px;
+            margin-top: 4px;
+            border: none;
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        input[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            background-color: #4f46e5;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #6366f1;
+        }
+
+        .results {
+            margin-top: 30px;
+        }
+
+        .results h2 {
+            font-size: 20px;
+            margin-bottom: 16px;
+        }
+
+        .result-item {
+            margin-bottom: 20px;
+            background-color: rgba(255, 255, 255, 0.05);
+            padding: 12px;
+            border-radius: 10px;
+        }
+
+        .result-item strong {
+            font-size: 16px;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .result-item span {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="glass-container">
+        <h1>Urban Intelligence Crawler</h1>
+        <p>Scrape live data across the web to uncover real-time urban insights</p>
+
+        <form method="POST">
+            <label for="query">Search Query</label>
+            <input type="text" name="query" placeholder="e.g. traffic congestion in Brooklyn" required>
+
+            <label for="pages">Pages to Scrape</label>
+            <input type="number" name="pages" value="1" min="1" max="5">
+
+            <input type="submit" value="Start Scraping">
+        </form>
+
+        {% if results %}
+        <div class="results">
+            <h2>Scraped Results</h2>
+            {% for title, snippet in results.items() %}
+                <div class="result-item">
+                    <strong>{{ title }}</strong>
+                    <span>{{ snippet }}</span>
+                </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

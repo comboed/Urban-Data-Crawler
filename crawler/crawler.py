@@ -1,5 +1,6 @@
+from . import cookies
+
 import requests
-import cookies
 import random
 
 class Crawler:
@@ -52,8 +53,6 @@ class Crawler:
             return crawler
 
         return None
-
-
 
     def get_headers(self):
         return {

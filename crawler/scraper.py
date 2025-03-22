@@ -1,5 +1,5 @@
-import crawler
-import captcha
+from . import crawler
+from . import captcha
 import requests
 
 class Scraper:
