@@ -3,7 +3,7 @@ from . import captcha
 import requests
 
 class Scraper:
-    def __init__(self, max_crawlers, captcha_key, proxy = None):
+    def __init__(self, captcha_key, max_crawlers, proxy = None):
         self.crawler = crawler.Crawler(max_crawlers, captcha.Captcha(captcha_key), proxy)
 
     def lookup_query(self, query, page):

@@ -1,11 +1,20 @@
 from flask import Flask, render_template, request
 from crawler import scraper
+
 import summarizer
+import hashlib
+import json
+import time
+
+with open("./config/config.json", "r") as file:
+    config = json.load(file)
+
+google_scraper = scraper.Scraper(config["CAPSOLVER_KEY"], config["CRAWLERS"])
+summary = summarizer.Summarizer(config["OPENAI_KEY"])
 
 app = Flask(__name__)
-
-google_scraper = scraper.Scraper(1, "CAP-B367787B6A0E5DEEE4186194F7C81372")
-summary = summarizer.Summarizer("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")
+cache = {}
+CACHE_TTL = 60 * 60 * 24
 
 @app.route("/", methods=["GET", "POST"])
 def index():
@@ -14,11 +23,26 @@ def index():
     if request.method == "POST":
         query = request.form.get("query")
         page = int(request.form.get("page", 1))
+        cache_key = hashlib.sha256(f"{query.lower()}:{page}".encode()).hexdigest()
 
-        scraped_data = google_scraper.lookup_query(query, page)
-        results = summary.process_scraped_data(scraped_data)
+        if cache_key in cache:
+            cached = cache[cache_key]
+            if time.time() - cached["timestamp"] < CACHE_TTL:
+                print("✅ Returning cached result")
+                results = cached["data"]
+            else:
+                del cache[cache_key]  # Expired
+        else:
+            print("🔄 Fetching new result")
+            scraped = google_scraper.lookup_query(query, page)
+            results = summary.process_scraped_data(scraped)
+
+            cache[cache_key] = {
+                "data": results,
+                "timestamp": time.time()
+            }
 
     return render_template("index.html", results=results)
 
-if __name__ == "__main__":
-    app.run(debug=True)
+if __name__ == "__main__":    
+    app.run(debug = True)
