@@ -35,8 +35,7 @@ API keys are stored in a `config.json` file in the following format:
   "CRAWLERS": 1,
   "OPENAI_KEY": "your-openai-api-key"
 }
-
----
+```
 
 ## Running
 Run app.py and connect to http://127.0.0.1:5000/ to run the crawler
