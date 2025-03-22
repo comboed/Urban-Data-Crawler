@@ -7,24 +7,23 @@
     <style>
         body {
             margin: 0;
-            padding: 0;
+            padding: 60px 0 0;
             font-family: 'Inter', sans-serif;
             background: linear-gradient(to bottom right, #1f1f47, #2b2d63);
             color: white;
             height: 100vh;
             display: flex;
             justify-content: center;
-            align-items: start;
-            padding-top: 60px;
+            align-items: flex-start;
         }
 
         .glass-container {
             background: rgba(255, 255, 255, 0.08);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
             backdrop-filter: blur(14px);
             -webkit-backdrop-filter: blur(14px);
             border-radius: 16px;
             border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
             padding: 32px;
             width: 500px;
             max-width: 90%;
@@ -51,8 +50,7 @@
         input[type="number"] {
             width: 100%;
             padding: 10px;
-            margin-bottom: 16px;
-            margin-top: 4px;
+            margin: 4px 0 16px;
             border: none;
             border-radius: 10px;
             background-color: rgba(255, 255, 255, 0.1);
@@ -90,20 +88,73 @@
 
         .result-item {
             margin-bottom: 20px;
-            background-color: rgba(255, 255, 255, 0.05);
             padding: 12px;
             border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+        }
+
+        .result-item:hover {
+            transform: translateY(-4px);
+            background-color: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+        }
+
+        .result-item h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 18px;
         }
 
         .result-item strong {
-            font-size: 16px;
+            color: #ffffff;
             display: block;
+            font-size: 16px;
             margin-bottom: 4px;
+            transition: transform 0.3s ease, text-shadow 0.3s ease;
+            transform: scale(1);
+        }
+
+        .result-item:hover strong {
+            text-shadow: 0 0 6px rgba(255, 255, 255, 0.25),
+                         0 0 14px rgba(147, 197, 253, 0.4);
+            transform: scale(1.02);
         }
 
         .result-item span {
-            font-size: 14px;
-            opacity: 0.9;
+            color: #f8fafc; /* Brighter white with a hint of blue */
+            font-size: 15px;
+            transition: text-shadow 0.3s ease;
+        }
+
+        .result-item:hover span {
+            text-shadow: 0 0 4px rgba(255, 255, 255, 0.15);
+        }
+
+        .result-item p,
+        .result-item span {
+            color: #ffffff;          /* Pure white */
+            font-size: 15px;
+            opacity: 1 !important;   /* Force full opacity */
+            text-shadow: none;
+            margin-bottom: 12px;
+            }
+
+        .result-item a:hover {
+            text-decoration: underline;
+        }
+
+        .source-link {
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 15px;
+            text-decoration: none;
+            transition: text-shadow 0.3s ease, color 0.3s ease;
+        }
+
+        .source-link:hover {
+            color: #ffffff;
+            text-shadow: 0 0 6px rgba(255, 255, 255, 0.4), 0 0 12px rgba(255, 255, 255, 0.2);
         }
     </style>
 </head>
@@ -116,20 +167,22 @@
             <label for="query">Search Query</label>
             <input type="text" name="query" placeholder="e.g. traffic congestion in Brooklyn" required>
 
-            <label for="pages">Pages to Scrape</label>
-            <input type="number" name="pages" value="1" min="1" max="5">
+            <label for="page">Page to Scrape</label>
+            <input type="number" name="page" value="1" min="1" max="9">
 
             <input type="submit" value="Start Scraping">
         </form>
 
         {% if results %}
         <div class="results">
-            <h2>Scraped Results</h2>
-            {% for title, snippet in results.items() %}
-                <div class="result-item">
-                    <strong>{{ title }}</strong>
-                    <span>{{ snippet }}</span>
-                </div>
+            <h2>Summarized Results</h2>
+            {% for title, content in results.items() %}
+            <div class="result-item">
+                <h3>{{ title }}</h3>
+                <p><strong>Issue:</strong> <span>{{ content[0] }}</span></p>
+                <p><strong>Solution:</strong> <span>{{ content[1] }}</span></p>
+                <p><a class="source-link" href="{{ content[2] }}" target="_blank">Source</a></p>
+            </div>
             {% endfor %}
         </div>
         {% endif %}
