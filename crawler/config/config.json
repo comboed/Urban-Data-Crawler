@@ -1,4 +1,5 @@
 {
     "CAPSOLVER_KEY": "KEY_GOES_HERE",
+    "OPENAI_KEY": "",
     "CRAWLERS": 1
 }

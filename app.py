@@ -13,6 +13,8 @@ def index():
         query = request.form.get("query")
         pages = int(request.form.get("pages", 1))
         
+        
+
         # Placeholder: Replace this with your real scraping logic
         # results = {
         #     f"Result Title {i+1}": f"Snippet for result {i+1} on '{query}'"
