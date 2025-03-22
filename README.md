@@ -9,12 +9,11 @@ The application scrapes search results from Google, summarizes relevant informat
 ## Features
 
 - Scrapes real-time data from Google based on a search query
-- Summarizes results using OpenAI (up to 3 issues and 3 solutions per result)
+- Summarizes results using OpenAI (up to 3 issues and 3 solutions)
 - Clean frontend with a modern, responsive design
-- Allows user-defined result limits
+- Supports user-defined result limits
 - In-memory caching to avoid redundant API calls
 - Multi-threaded summarization for faster response times
-- Source link highlighting with animated hover effects
 
 ---
 
@@ -24,58 +23,20 @@ The application scrapes search results from Google, summarizes relevant informat
 - Flask
 - Requests
 
-Install dependencies:
+---
 
-```bash
-pip install -r requirements.txt
-Configuration
-Create a file at ./config/config.json with the following structure:
+## Configuration
 
-json
-Copy
-Edit
+API keys are stored in a `config.json` file in the following format:
+
+```json
 {
   "CAPSOLVER_KEY": "your-capsolver-key",
   "CRAWLERS": 1,
   "OPENAI_KEY": "your-openai-api-key"
 }
-Running the App
-bash
-Copy
-Edit
-python app.py
-Then visit: http://127.0.0.1:5000 in your browser.
-
-Project Structure
-graphql
-Copy
-Edit
-.
-├── app.py               # Main Flask application
-├── summarizer.py        # OpenAI-powered summarization logic (threaded)
-├── crawler/
-│   └── scraper.py       # Google scraper (CAPTCHA + result parser)
-├── templates/
-│   └── index.html       # Web UI (Jinja2 + CSS)
-├── static/
-│   └── styles.css       # Styling and animations
-├── config/
-│   └── config.json      # Your API keys and settings
-└── README.md            # This file
-License
-This project is licensed under the MIT License.
-
-yaml
-Copy
-Edit
 
 ---
 
-✅ You can copy-paste that directly into `README.md`.  
-Want me to generate a matching `requirements.txt` based on your code too?
-
-
-
-
-
-
+## Running
+Run app.py and connect to http://127.0.0.1:5000/ to run the crawler
