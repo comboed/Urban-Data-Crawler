@@ -1,6 +1,6 @@
-# Urban Intelligence Crawler
+# AI Data Crawler
 
-Urban Intelligence Crawler is a web-based tool designed to extract real-time data from the web, summarize key insights using AI, and present the results in a structured format. It is built for use cases such as urban planning, city monitoring, and research.
+AI Data Crawler is a web-based tool designed to extract real-time data from the web, summarize key insights using AI, and present the results in a structured format. It is built for use cases such as urban planning, city monitoring, and research.
 
 The application scrapes search results from Google, summarizes relevant information using OpenAI's GPT model, and categorizes the content into issues and solutions. It includes features for limiting result count, caching results to reduce repeated processing, and threaded summarization for performance.
 
